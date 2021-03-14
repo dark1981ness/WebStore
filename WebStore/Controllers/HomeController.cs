@@ -11,9 +11,39 @@ namespace WebStore.Controllers
     {
         private static readonly List<Employee> _employees = new()
         {
-            new Employee { Id=1,LastName="Иванов",FirstName="Иван",Patronymic="Иванович", Age=27},
-            new Employee { Id=2,LastName="Петров",FirstName="Петр",Patronymic="Петрович", Age=31},
-            new Employee { Id=3,LastName="Сидоров",FirstName="Сидор",Patronymic="Сидорович", Age=18}
+            new Employee
+            {
+                Id = 1,
+                LastName = "Иванов",
+                FirstName = "Иван",
+                Patronymic = "Иванович",
+                Birthday = new DateTime(1975, 10, 28),
+                HireDate = new DateTime(2015, 04, 1),
+                EMail = @"IIvanov@gb.ru",
+                Salary = 50000
+            },
+            new Employee
+            {
+                Id = 1,
+                LastName = "Петров",
+                FirstName = "Петр",
+                Patronymic = "Петрович",
+                Birthday = new DateTime (1995, 01, 30),
+                HireDate = new DateTime (2015, 04, 1),
+                EMail = @"IIvanov@gb.ru",
+                Salary = 60000
+            },
+            new Employee
+            {
+                Id = 1,
+                LastName = "Сидоров",
+                FirstName = "Сидор",
+                Patronymic = "Сидорович",
+                Birthday = new DateTime (1986, 08, 15),
+                HireDate = new DateTime (2015, 04, 1),
+                EMail = @"IIvanov@gb.ru",
+                Salary = 150000
+            }
         };
 
         public IActionResult Index() => View();
