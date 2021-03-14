@@ -24,24 +24,24 @@ namespace WebStore.Controllers
             },
             new Employee
             {
-                Id = 1,
+                Id = 2,
                 LastName = "Петров",
                 FirstName = "Петр",
                 Patronymic = "Петрович",
                 Birthday = new DateTime (1995, 01, 30),
                 HireDate = new DateTime (2015, 04, 1),
-                EMail = @"IIvanov@gb.ru",
+                EMail = @"PPetrov@gb.ru",
                 Salary = 60000
             },
             new Employee
             {
-                Id = 1,
+                Id = 3,
                 LastName = "Сидоров",
                 FirstName = "Сидор",
                 Patronymic = "Сидорович",
                 Birthday = new DateTime (1986, 08, 15),
                 HireDate = new DateTime (2015, 04, 1),
-                EMail = @"IIvanov@gb.ru",
+                EMail = @"SSidorov@gb.ru",
                 Salary = 150000
             }
         };
@@ -53,6 +53,12 @@ namespace WebStore.Controllers
         public IActionResult Employees()
         {
             return View(_employees);
+        }
+
+        public IActionResult EmployeeCard(int id)
+        {
+            Employee employee = _employees.SingleOrDefault(s => s.Id == id);
+            return View(employee);
         }
     }
 }

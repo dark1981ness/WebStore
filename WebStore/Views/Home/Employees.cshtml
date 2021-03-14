@@ -17,7 +17,7 @@
                 <th>Фамилия</th>
                 <th>Имя</th>
                 <th>Отчество</th>
-                <th>Возраст</th>
+                <th>Карточка</th>
             </tr>
         </thead>
         <tbody>
@@ -28,7 +28,7 @@
                     <td>@employee.LastName</td>
                     <td>@employee.FirstName</td>
                     <td>@employee.Patronymic</td>
-                    <td>@employee.Age</td>
+                    <td><a href="~/Home/EmployeeCard/@employee.Id">Детали</a></td>
                 </tr>
             }
         </tbody>
