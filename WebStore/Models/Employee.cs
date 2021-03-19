@@ -16,12 +16,7 @@ namespace WebStore.Models
         {
             get
             {
-                if (!Birthday.HasValue)
-                {
-                    return CalcAge(DateTime.Now);
-                }
-
-                return CalcAge(Birthday.Value);
+                return CalcAge(Birthday ?? DateTime.Now);
             }
         }
 
