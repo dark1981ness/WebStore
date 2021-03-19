@@ -12,7 +12,7 @@ namespace WebStore.Controllers
 
         public IActionResult ContactUs() => View();
 
-        public IActionResult NotFoundPage() => View();
+        public IActionResult PageNotFound() => View();
 
         public IActionResult BlogSingle() => View();
 
