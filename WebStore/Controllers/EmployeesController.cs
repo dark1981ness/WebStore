@@ -26,9 +26,40 @@ namespace WebStore.Controllers
             return View(employee);
         }
 
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
-            return View();
+            Employee employee = _Employees.SingleOrDefault(s => s.Id == id);
+            if (employee is null)
+            {
+                return NotFound();
+            }
+            return View(employee);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            Employee employee = _Employees.SingleOrDefault(s => s.Id == id);
+            _Employees.Remove(employee);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Employee employee, int id)
+        {
+            _Employees.Where(s => s.Id == id)
+                .Select(s =>
+                {
+                    s.FirstName = employee.FirstName;
+                    s.LastName = employee.LastName;
+                    s.Patronymic = employee.Patronymic;
+                    s.Birthday = employee.Birthday;
+                    s.HireDate = employee.HireDate;
+                    s.Salary = employee.Salary;
+                    s.EMail = employee.EMail;
+                    return s;
+                }).ToList();
+
+            return RedirectToAction("Index");
         }
     }
 }
