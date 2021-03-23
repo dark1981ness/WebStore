@@ -12,7 +12,11 @@ namespace WebStore.Infrastructure.Services.Interfaces
 
         Employee Get(int id);
 
+        Employee GetByName(string lastName, string firstName, string patronymic);
+
         int Add(Employee employee);
+
+        Employee Add(string lastName, string firstName, string patronymic, DateTime dOb);
 
         void Update(Employee employee);
 
