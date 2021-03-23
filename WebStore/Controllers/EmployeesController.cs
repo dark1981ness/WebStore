@@ -4,10 +4,11 @@ using System.Linq;
 using WebStore.Data;
 using WebStore.Infrastructure.Services.Interfaces;
 using WebStore.Models;
+using WebStore.ViewModels;
 
 namespace WebStore.Controllers
 {
-    [Route("Staff")]
+    //[Route("Staff")]
     public class EmployeesController : Controller
     {
         //private readonly List<Employee> _Employees;
@@ -19,10 +20,10 @@ namespace WebStore.Controllers
             _employessData = employessData;
         }
 
-        [Route("all")]
+        //[Route("all")]
         public IActionResult Index() => View(_employessData.Get());
 
-        [Route("info-(id-{id})")]
+        //[Route("info-(id-{id})")]
         public IActionResult Details(int id)
         {
             Employee employee = _employessData.Get(id);
@@ -35,38 +36,71 @@ namespace WebStore.Controllers
 
         public IActionResult Edit(int id)
         {
-            Employee employee = _Employees.SingleOrDefault(s => s.Id == id);
+            Employee employee = _employessData.Get(id);
             if (employee is null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(new EmployeeViewModel
+            {
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Patronymic = employee.Patronymic,
+                Birthday = employee.Birthday,
+                HireDate = employee.HireDate,
+                Salary = employee.Salary,
+                EMail = employee.EMail
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Edit(EmployeeViewModel model)
+        {
+            var employee = new Employee
+            {
+                Id = model.Id,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Patronymic = model.Patronymic,
+                Birthday = model.Birthday,
+                HireDate = model.HireDate,
+                Salary = model.Salary,
+                EMail = model.EMail
+            };
+
+            _employessData.Update(employee);
+
+            return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int id)
         {
-            Employee employee = _Employees.SingleOrDefault(s => s.Id == id);
-            _Employees.Remove(employee);
+            //Employee employee = _Employees.SingleOrDefault(s => s.Id == id);
+            //_Employees.Remove(employee);
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult Edit(Employee employee, int id)
-        {
-            _Employees.Where(s => s.Id == id)
-                .Select(s =>
-                {
-                    s.FirstName = employee.FirstName;
-                    s.LastName = employee.LastName;
-                    s.Patronymic = employee.Patronymic;
-                    s.Birthday = employee.Birthday;
-                    s.HireDate = employee.HireDate;
-                    s.Salary = employee.Salary;
-                    s.EMail = employee.EMail;
-                    return s;
-                }).ToList();
+        #region Edit w/o EmployeeViewModel
+        //[HttpPost]
+        //public IActionResult Edit(Employee employee, int id)
 
-            return RedirectToAction("Index");
-        }
+        //{
+        //    _Employees.Where(s => s.Id == id)
+        //        .Select(s =>
+        //        {
+        //            s.FirstName = employee.FirstName;
+        //            s.LastName = employee.LastName;
+        //            s.Patronymic = employee.Patronymic;
+        //            s.Birthday = employee.Birthday;
+        //            s.HireDate = employee.HireDate;
+        //            s.Salary = employee.Salary;
+        //            s.EMail = employee.EMail;
+        //            return s;
+        //        }).ToList();
+
+        //    return RedirectToAction("Index");
+        //}
+        #endregion
+
     }
 }

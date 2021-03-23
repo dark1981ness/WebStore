@@ -25,7 +25,7 @@
                     <td>@employee.LastName</td>
                     <td>@employee.FirstName</td>
                     <td>@employee.Patronymic</td>
-                    <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id">Детали</a></td>
+                    <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-default">Детали</a></td>
                     <td>
                         <a asp-controller="Employees" asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-info col-sm-2"><i class="fas fa-user-edit"></i></a>
                         <a asp-controller="Employees" asp-action="Delete" asp-route-id="@employee.Id" class="btn btn-danger col-sm-2"><i class="fas fa-user-minus"></i></a>
@@ -36,7 +36,7 @@
     </table>
 
     <p>
-        <a asp-controller="Home" asp-action="Index">Домой</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default">Домой</a>
     </p>
 
 </div>
