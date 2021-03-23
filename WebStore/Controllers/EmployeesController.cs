@@ -34,9 +34,15 @@ namespace WebStore.Controllers
             return View(employee);
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Create() => View("Edit", new EmployeeViewModel());
+
+        public IActionResult Edit(int? id)
         {
-            Employee employee = _employessData.Get(id);
+            if (id is null)
+            {
+                return View(new EmployeeViewModel());
+            }
+            Employee employee = _employessData.Get((int)id);
             if (employee is null)
             {
                 return NotFound();
@@ -68,7 +74,10 @@ namespace WebStore.Controllers
                 EMail = model.EMail
             };
 
-            _employessData.Update(employee);
+            if (employee.Id == 0)
+                _employessData.Add(employee);
+            else
+                _employessData.Update(employee);
 
             return RedirectToAction("Index");
         }

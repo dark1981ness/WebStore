@@ -16,7 +16,7 @@ namespace WebStore.Infrastructure.Services.Interfaces
 
         int Add(Employee employee);
 
-        Employee Add(string lastName, string firstName, string patronymic, DateTime dOb);
+        Employee Add(string lastName, string firstName, string patronymic, DateTime dOb, DateTime hireDate, decimal salary, string eMail);
 
         void Update(Employee employee);
 

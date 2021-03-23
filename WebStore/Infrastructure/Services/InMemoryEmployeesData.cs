@@ -32,14 +32,17 @@ namespace WebStore.Infrastructure.Services
             return employee.Id;
         }
 
-        public Employee Add(string lastName, string firstName, string patronymic, DateTime dOb)
+        public Employee Add(string lastName, string firstName, string patronymic, DateTime dOb, DateTime hireDate, decimal salary, string eMail)
         {
             var employee = new Employee()
             {
                 LastName = lastName,
                 FirstName = firstName,
                 Patronymic = patronymic,
-                Birthday = dOb
+                Birthday = dOb,
+                HireDate = hireDate,
+                Salary = salary,
+                EMail = eMail
             };
 
             Add(employee);
