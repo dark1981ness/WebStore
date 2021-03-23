@@ -86,6 +86,30 @@ namespace WebStore.Controllers
         {
             //Employee employee = _Employees.SingleOrDefault(s => s.Id == id);
             //_Employees.Remove(employee);
+            if (id <= 0) return BadRequest();
+
+            var employee = _employessData.Get(id);
+
+            if (employee is null)
+                return NotFound();
+
+            return View(new EmployeeViewModel
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Patronymic = employee.Patronymic,
+                Birthday = employee.Birthday,
+                HireDate = employee.HireDate,
+                Salary = employee.Salary,
+                EMail = employee.EMail
+            });
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            _employessData.Delete(id);
             return RedirectToAction("Index");
         }
 
