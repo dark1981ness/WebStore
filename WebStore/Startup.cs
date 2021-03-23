@@ -39,6 +39,8 @@ namespace WebStore
 
             app.UseRouting();
 
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/Greetings", async context =>
