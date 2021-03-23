@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,16 +10,21 @@ namespace WebStore.ViewModels
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Введите имя")]
         public string FirstName { get; set; }
 
+        [Required(ErrorMessage = "Введите фамилию")]
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "Введите отчество")]
         public string Patronymic { get; set; }
 
         public DateTime? Birthday { get; set; }
 
+        [Required(ErrorMessage = "Введите имя")]
         public DateTime HireDate { get; set; }
 
+        [RegularExpression(@"\d+(\,\d{1,2})?", ErrorMessage = "Формат ввода #, либо #,## ")]
         public decimal Salary { get; set; }
 
         public string EMail { get; set; }
