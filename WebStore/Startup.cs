@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using WebStore.DAL.Context;
+using WebStore.Data;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Services;
 using WebStore.Infrastructure.Services.Interfaces;
@@ -15,20 +16,15 @@ namespace WebStore
 {
     public record Startup(IConfiguration Configuration)
     {
-        //private IConfiguration Configuration { get; }
-        //public Startup(IConfiguration Configuration)
-        //{
-        //    this.Configuration = Configuration; 
-        //}
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WebStoreDB>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("Default"))
-                    .EnableSensitiveDataLogging(true)
+                    //.EnableSensitiveDataLogging(true)
                     //.LogTo(Console.WriteLine)
                     );
-
+            services.AddTransient<WebStoreDbInitializer>();
             services.AddTransient<IEmployeesData, InMemoryEmployeesData>();
             services.AddTransient<IProductData, InMemoryProductData>();
 
@@ -36,14 +32,15 @@ namespace WebStore
                 .AddControllersWithViews(
                     mvc =>
                     {
-                        //mvc.Conventions.Add(new ActionDescriptionAttribute("123"));
                         mvc.Conventions.Add(new ApplicationConvention());
                     })
                 .AddRazorRuntimeCompilation();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebStoreDbInitializer dbInitializer)
         {
+            dbInitializer.Initialize();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
