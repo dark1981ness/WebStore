@@ -26,7 +26,7 @@ namespace WebStore.Infrastructure.Services.InSql
         {
             IQueryable<Product> query = _db.Products;
 
-            if (productFilter?.Ids.Length > 0)
+            if (productFilter?.Ids?.Length > 0)
                 query = query.Where(product => productFilter.Ids.Contains(product.Id));
             else
             {

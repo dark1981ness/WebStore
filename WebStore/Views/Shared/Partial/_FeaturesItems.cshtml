@@ -13,9 +13,12 @@
                         <img src="~/images/shop/@product.ImageUrl" alt="" />
                         <h2>@product.Price.ToString("C")</h2>
                         <p>
-                            <a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id">@product.Name</a> 
+                            <a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id">@product.Name</a>
                         </p>
-                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i></a>
+                        <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id"
+                           class="btn btn-default add-to-cart">
+                            <i class="fa fa-shopping-cart"></i>В корзину
+                        </a>
                     </div>
                     <div class="product-overlay">
                         <div class="overlay-content">
@@ -23,7 +26,10 @@
                             <p>
                                 <a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id">@product.Name</a>
                             </p>
-                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i></a>
+                            <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id"
+                               class="btn btn-default add-to-cart">
+                                <i class="fa fa-shopping-cart"></i>В корзину
+                            </a>
                         </div>
                     </div>
                 </div>
