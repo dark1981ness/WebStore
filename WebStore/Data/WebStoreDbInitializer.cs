@@ -1,20 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WebStore.DAL.Context;
+using WebStore.Domain.Entities.Identity;
 
 namespace WebStore.Data
 {
     public class WebStoreDbInitializer
     {
         private readonly WebStoreDB _db;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly ILogger<WebStoreDbInitializer> _logger;
 
-        public WebStoreDbInitializer(WebStoreDB db, ILogger<WebStoreDbInitializer> logger)
+        public WebStoreDbInitializer(WebStoreDB db,
+            UserManager<User> userManager,
+            RoleManager<Role> roleManager,
+            ILogger<WebStoreDbInitializer> logger)
         {
             _db = db;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _logger = logger;
         }
 
@@ -39,6 +49,16 @@ namespace WebStore.Data
             catch (Exception e)
             {
                 _logger.LogError(e, "ошибка при инициализации товаров в БД");
+                throw;
+            }
+
+            try
+            {
+                InitializeIdentityAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "ошибка при инициализации данных системы Identity");
                 throw;
             }
 
@@ -78,9 +98,9 @@ namespace WebStore.Data
                 TestData.Sections,
                 parent => parent.Id,
                 child => child.ParentId,
-                (parent,child)=>(parent,child));
+                (parent, child) => (parent, child));
 
-            foreach (var (parent,child) in section_section)
+            foreach (var (parent, child) in section_section)
                 child.Parent = parent;
 
             foreach (var product in TestData.Products)
@@ -111,5 +131,50 @@ namespace WebStore.Data
 
             _logger.LogInformation("Инициализация товаров завершена");
         }
+
+        private async Task InitializeIdentityAsync()
+        {
+            _logger.LogInformation("Инициализация БД системы Identity");
+            async Task CheckRole(string roleName)
+            {
+                if (!await _roleManager.RoleExistsAsync(roleName))
+                {
+                    _logger.LogInformation("Роль {0} отсутствуетю Создаю...", roleName);
+                    await _roleManager.CreateAsync(new Role { Name = roleName });
+                    _logger.LogInformation("Роль {0} создана успешно", roleName);
+                }
+            }
+
+            await CheckRole(Role._administrators);
+            await CheckRole(Role._users);
+
+            if (await _userManager.FindByNameAsync(User._administrator) is null)
+            {
+                _logger.LogInformation("Учетная запись администратора в БД отсутствует. Создаю...");
+
+                var admin = new User
+                {
+                    UserName = User._administrator
+                };
+
+                var creation_result = await _userManager.CreateAsync(admin, User._defaultAdminPassword);
+
+                if (creation_result.Succeeded)
+                {
+                    _logger.LogInformation("Учетная запись администратора создана успешно");
+                    await _userManager.AddToRoleAsync(admin, Role._administrators);
+                    _logger.LogInformation("Учетная запись администратора наделена ролью администартора");
+                }
+                else
+                {
+                    var errors = creation_result.Errors.Select(e => e.Description).ToArray();
+                    _logger.LogInformation("Учетная запись администратора создана с ошибкой{0}", string.Join(",", errors));
+                    throw new InvalidOperationException($"Оштбка при создании учетной записи администратора: {string.Join(",", errors)}");
+                }
+            }
+
+            _logger.LogInformation("Инициализация БД системы Identity выполнена");
+        }
+
     }
 }
