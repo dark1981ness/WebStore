@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using WebStore.Data;
 using WebStore.Infrastructure.Services.Interfaces;
 using WebStore.Models;
 using WebStore.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using WebStore.Domain.Entities.Identity;
 
 namespace WebStore.Controllers
 {
     //[Route("Staff")]
+
+    [Authorize]
     public class EmployeesController : Controller
     {
         //private readonly List<Employee> _Employees;
@@ -34,8 +35,10 @@ namespace WebStore.Controllers
             return View(employee);
         }
 
+        [Authorize(Roles = Role._administrators)]
         public IActionResult Create() => View("Edit", new EmployeeViewModel());
 
+        [Authorize(Roles = Role._administrators)]
         public IActionResult Edit(int? id)
         {
             if (id is null)
@@ -59,6 +62,7 @@ namespace WebStore.Controllers
             });
         }
 
+        [Authorize(Roles = Role._administrators)]
         [HttpPost]
         public IActionResult Edit(EmployeeViewModel model)
         {
@@ -89,6 +93,7 @@ namespace WebStore.Controllers
             }
         }
 
+        [Authorize(Roles = Role._administrators)]
         public IActionResult Delete(int id)
         {
             //Employee employee = _Employees.SingleOrDefault(s => s.Id == id);
@@ -113,6 +118,7 @@ namespace WebStore.Controllers
             });
         }
 
+        [Authorize(Roles = Role._administrators)]
         [HttpPost]
         public IActionResult DeleteConfirmed(int id)
         {
