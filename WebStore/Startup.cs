@@ -69,6 +69,7 @@ namespace WebStore
             //services.AddTransient<IProductData, InMemoryProductData>();
             services.AddScoped<IProductData, SqlProductData>();
             services.AddScoped<ICartServices, InCookiesCartService>();
+            services.AddScoped<IOrderService, SqlOrderService>();
 
             services
                 .AddControllersWithViews(
