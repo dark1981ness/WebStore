@@ -31,7 +31,7 @@ namespace WebStore
                     );
             services.AddTransient<WebStoreDbInitializer>();
 
-            services.AddIdentity<User,Role>()
+            services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<WebStoreDB>()
                 .AddDefaultTokenProviders();
 
@@ -101,6 +101,11 @@ namespace WebStore
                 {
                     await context.Response.WriteAsync(Configuration["Greetings"]);
                 });
+
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
 
                 endpoints.MapControllerRoute(
                     "default",
