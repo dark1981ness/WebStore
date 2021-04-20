@@ -26,13 +26,23 @@ namespace WebStore.Infrastructure.Services.InSql
         {
             IQueryable<Product> query = _db.Products;
 
-            if (productFilter?.SectionId is { } section_id)
-                query = query.Where(product => product.SectionId == section_id);
+            if (productFilter?.Ids?.Length > 0)
+                query = query.Where(product => productFilter.Ids.Contains(product.Id));
+            else
+            {
+                if (productFilter?.SectionId is { } section_id)
+                    query = query.Where(product => product.SectionId == section_id);
 
-            if (productFilter?.BrandId is { } brand_id)
-                query = query.Where(product => product.BrandId == brand_id);
+                if (productFilter?.BrandId is { } brand_id)
+                    query = query.Where(product => product.BrandId == brand_id);
+            }
 
             return query;
         }
+
+        public Product GetProductById(int id) => _db.Products
+            .Include(p => p.Section)
+            .Include(p => p.Brand)
+            .FirstOrDefault(p => p.Id == id);
     }
 }
